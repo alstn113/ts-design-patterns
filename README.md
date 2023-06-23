@@ -1,8 +1,8 @@
 # Design Patterns
 
-## Creational Design Pattern
+## Creational Pattern(생성 패턴)
 
-For handling Object creation mechanisms
+객체의 생성 방식과 객체 생성과정을 추상화하여 객체 생성을 단순화하는 패턴입니다. 주요 목표는 유연성, 재사용성, 코드의 간결성을 향상시키는 것입니다.
 
 - Constructor(생성자 패턴):
   Constructor(생성자) 패턴은 객체를 생성할 때 생성자 함수를 사용하는 가장 기본적인 방법입니다. 일반적으로 new 키워드를 사용하여 클래스의 인스턴스를 생성합니다.
@@ -17,9 +17,9 @@ For handling Object creation mechanisms
 - Builder
   Builder 패턴은 복잡한 객체의 생성 과정을 단계적으로 처리하는 방식입니다. 객체 생성을 위한 여러 단계를 거쳐 최종적으로 객체를 생성하게 되며, 이를 통해 객체 생성의 유연성과 가독성을 향상시킬 수 있습니다. Builder 패턴은 객체의 생성 과정을 캡슐화하여 복잡성을 해소하고, 다양한 종류의 객체를 생성할 수 있는 유연성을 제공합니다.
 
-## Structural Design Pattern
+## Structural Pattern(구조 패턴)
 
-For identifying ways to realize relationships between entities
+객체 간의 관계를 구성하고, 객체들을 더 큰 구조로 조합하는 패턴입니다. 주로 상속, 인터페이스, 컴포지션 등을 활용하여 시스템의 구조를 설계하고 확장하기 위해 사용됩니다.
 
 - Adapter
 - Bridge
@@ -29,9 +29,9 @@ For identifying ways to realize relationships between entities
 - Flyweight
 - Proxy
 
-## Behavioral Design Pattern
+## Behavioral Pattern(행동 패턴)
 
-For handing communication between different objects
+객체 간의 상호작용과 책임 분배를 중심으로 설계하는 패턴입니다. 객체 간의 행동 패턴을 조직화하여 효율적인 소프트웨어 설계를 가능하게 합니다.
 
 - Chain of Responsibility
 - Command
