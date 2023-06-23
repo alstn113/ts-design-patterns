@@ -8,6 +8,6 @@
     "strict": true,
     "skipLibCheck": true
   },
-  "include": ["src/**/*"],
+  "include": ["Design-Patterns/**/*"],
   "exclude": ["node_modules", "dist"]
 }
