@@ -10,7 +10,8 @@ For handling Object creation mechanisms
   팩토리 패턴은 클래스가 객체를 생성하는 패턴이다.
 - Abstract Factory(추상 팩토리 패턴):
   관련성 있는 여러 개의 팩토리들을 추상화하여 객체 생성을 담당하는 디자인 패턴입니다.
-- Prototype
+- Prototype(프로토타입 패턴):
+  객체의 템플릿을 기반으로 새로운 객체를 생성하는 패턴입니다. 프로토타입 패턴은 상속을 기반으로 하지만 Javascript에서는 Object의 create()메소드를 활용하여 손쉽게 구현한다.
 - Singleton
 - Builder
 
