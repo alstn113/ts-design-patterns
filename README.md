@@ -8,7 +8,8 @@ For handling Object creation mechanisms
   생성자 패턴은 기존에 클래스를 제공하지 않았던 자바스크립트가 ES6에서 class 키워드 제공을 통해 향상된 패턴이다.
 - Factory(팩토리 패턴):
   팩토리 패턴은 클래스가 객체를 생성하는 패턴이다.
-- Abstract Factory
+- Abstract Factory(추상 팩토리 패턴):
+  관련성 있는 여러 개의 팩토리들을 추상화하여 객체 생성을 담당하는 디자인 패턴입니다.
 - Prototype
 - Singleton
 - Builder
