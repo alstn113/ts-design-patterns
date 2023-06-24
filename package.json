@@ -1,7 +1,7 @@
 {
   "name": "ts-design-patterns",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "index.ts",
   "scripts": {},
   "license": "MIT",
   "devDependencies": {
