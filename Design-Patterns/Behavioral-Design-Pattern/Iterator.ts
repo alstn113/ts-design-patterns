@@ -4,7 +4,7 @@
 
 // 우선, Iterator 인터페이스를 정의합니다.
 
-export interface Iterator<T> {
+interface Iterator<T> {
   hasNext(): boolean;
   next(): T;
 }
@@ -69,3 +69,5 @@ while (iterator.hasNext()) {
 // 결과적으로 1부터 5까지의 숫자가 각각 한 줄씩 출력됩니다.
 
 // Iterator 패턴을 사용하면 컬렉션의 내부 구조를 노출하지 않고도 요소에 접근할 수 있으며, 다양한 순회 알고리즘을 구현할 수 있습니다.
+
+export {};
