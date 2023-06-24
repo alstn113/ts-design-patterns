@@ -29,3 +29,5 @@ class AppConfig {
 
 const appConfig: AppConfig = AppConfig.getInstance();
 console.log(appConfig.getSetting('apiUrl')); // 출력: https://api.example.com
+
+export {};

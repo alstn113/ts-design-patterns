@@ -55,3 +55,5 @@ try {
 } catch (e: any) {
   console.log(e.message); // 지원되지 않는 도형입니다.
 }
+
+export {};

@@ -70,3 +70,5 @@ console.log(`Total sprites created: ${spriteFactory.countSprites()}`);
 
 // Flyweight 패턴은 객체의 중복 생성을 피하여 메모리를 절약하고 성능을 향상시킬 수 있습니다.
 // 이는 대규모나 반복적인 객체 생성이 필요한 상황에서 유용하게 사용될 수 있습니다.
+
+export {};

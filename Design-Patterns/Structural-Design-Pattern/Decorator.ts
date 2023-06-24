@@ -56,3 +56,5 @@ emojiDecorator.sendMessage('Hello, world!');
 // 암호화된 메시지 전송
 encryptionDecorator.sendMessage('Hello, world!');
 // [출력] Sending message: Encrypted: Hello, world!
+
+export {};

@@ -73,3 +73,5 @@ engineeringDepartment.print();
 // Employee: Alice
 // Department: Testing Team
 // Employee: Bob
+
+export {};

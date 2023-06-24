@@ -33,3 +33,5 @@ const adapter = new LegacyApiAdapter(legacyApi);
 
 const newData = adapter.requestNewData();
 console.log(newData); // 출력: New data: Legacy data
+
+export {};

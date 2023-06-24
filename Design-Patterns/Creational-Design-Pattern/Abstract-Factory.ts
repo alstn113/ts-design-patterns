@@ -84,3 +84,5 @@ clientCode(factory2);
 // [출력]
 // ConcreteProductA2: methodA;
 // ConcreteProductB2: methodB;
+
+export {};

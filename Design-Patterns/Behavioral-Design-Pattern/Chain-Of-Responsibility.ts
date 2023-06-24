@@ -93,3 +93,5 @@ loggerChain.log(LogLevel.ERROR, 'This is an error message.');
 
 // Chain of Responsibility 패턴을 사용하면 요청을 처리할 객체들의 체인을 구성하여 유연하게 처리 로직을 변경하거나 추가할 수 있습니다.
 // 로깅 시스템 외에도 사용자 인증, 예외 처리 등 다양한 상황에서 유용하게 적용할 수 있습니다.
+
+export {};

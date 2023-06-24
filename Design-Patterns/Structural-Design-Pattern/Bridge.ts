@@ -46,3 +46,5 @@ smsNotification.send('Hello, SMS notification!');
 
 const pushNotification = new NotificationBridge(new PushNotificationPlatform());
 pushNotification.send('Hello, push notification!');
+
+export {};

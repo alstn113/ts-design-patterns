@@ -20,3 +20,5 @@ class Product {
 const product = new Product('Example Product', 10);
 console.log(product.getName()); // "Example Product"
 console.log(product.getPrice()); // 10
+
+export {};

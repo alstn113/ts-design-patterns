@@ -41,3 +41,5 @@ const npcCharacter: Character = Object.create(npcPrototype);
 // 복제된 캐릭터 정보 출력
 playerCharacter.info(); // Player Character: John (Level 10)
 npcCharacter.info(); // Non-Player Character: Goblin (Level 5)
+
+export {};

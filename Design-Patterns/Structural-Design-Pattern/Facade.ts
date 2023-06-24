@@ -51,3 +51,5 @@ console.log(`Account balance: ${balance}`);
 // Facade 패턴을 통해 클라이언트는 내부 구조를 알 필요 없이 은행 업무를 처리할 수 있게 됩니다.
 
 // Facade 패턴은 복잡한 시스템을 단순화하고 클라이언트와의 결합도를 낮추는 데에 유용합니다.
+
+export {};
