@@ -76,3 +76,5 @@ console.log(`Shipping Cost: $${internationalShippingCost}`); // "Shipping Cost: 
 
 // 이와 같이 Strategy 패턴을 사용하면 동일한 기능을 다양한 전략으로 구현할 수 있고, 객체의 유연성과 재사용성을 높일 수 있습니다.
 // 배송 방법에 따른 비용 계산과 같이 다양한 조건에 따라 동작을 다르게 해야하는 경우에 유용한 패턴입니다.
+
+export {};
