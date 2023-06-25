@@ -1,55 +1,69 @@
-// 타입스크립트로 Facade 패턴을 설명하기 위해 은행 업무를 처리하는 상황을 가정해보겠습니다.
-// 이 은행 시스템은 여러 서브시스템(계좌 관리, 거래 기록, 인증 등)으로 구성되어 있습니다.
-// Facade 패턴을 사용하여 은행 업무를 간소화하고 클라이언트에게 단순한 인터페이스를 제공할 수 있습니다.
+// Facade 패턴은 복잡한 서브시스템을 간단하고 일관된 인터페이스로 제공하여 사용자가 서브시스템을 더 쉽게 사용할 수 있게 해주는 디자인 패턴입니다.
+// 이를 통해 복잡한 서브시스템을 감추고 단순한 인터페이스만 노출시킴으로써 사용자가 더 편리하게 상호작용할 수 있습니다.
 
-// 먼저, 은행 서브시스템을 나타내는 클래스들을 작성합니다. 예를 들어, 계좌 관리 서브시스템은 다음과 같이 구현될 수 있습니다
-class AccountService {
-  createAccount(customerId: string): void {
-    console.log(`Account created for customer ${customerId}`);
-  }
+// 일반적인 상황으로 예시를 들어보겠습니다. 가정해보세요 우리는 주문 처리 시스템을 개발하고 있습니다.
+// 이 시스템에서는 주문을 생성하고, 결제를 처리하며, 배송을 조정하는 등 다양한 서브시스템이 있습니다.
+// 이때 Facade 패턴을 활용하여 각 서브시스템의 복잡한 로직을 간단한 인터페이스로 노출시킬 수 있습니다.
 
-  getAccountBalance(accountId: string): number {
-    console.log(`Fetching account balance for account ${accountId}`);
-    return 1000; // 임의의 잔액을 반환
+// 먼저 주문 생성 서브시스템을 나타내는 OrderSystem 클래스를 작성합니다.
+
+class OrderSystem {
+  createOrder(products: string[]): string {
+    // 주문 생성 로직
+    const orderId = Math.random().toString(36).substr(2, 9);
+    console.log(`Order created: ${orderId}`);
+    return orderId;
   }
 }
 
-// 이와 같은 방식으로 거래 기록 서브시스템, 인증 서브시스템 등의 클래스를 작성합니다.
+// 다음으로 결제 처리 서브시스템을 나타내는 PaymentSystem 클래스를 작성합니다.
 
-// 다음으로, Facade 클래스를 작성하여 클라이언트에게 단순한 인터페이스를 제공합니다. 예를 들어, BankFacade 클래스를 작성할 수 있습니다
-class BankFacade {
-  private accountService: AccountService;
-  // 다른 서브시스템들도 동일한 방식으로 추가
+class PaymentSystem {
+  processPayment(orderId: string, amount: number): void {
+    // 결제 처리 로직
+    console.log(`Payment processed for order ${orderId}: $${amount}`);
+  }
+}
+
+// 마지막으로 배송 조정 서브시스템을 나타내는 ShippingSystem 클래스를 작성합니다.
+
+class ShippingSystem {
+  adjustShipping(orderId: string, address: string): void {
+    // 배송 조정 로직
+    console.log(`Shipping adjusted for order ${orderId}: ${address}`);
+  }
+}
+
+// 이제 Facade 클래스인 OrderFacade를 작성합니다. OrderFacade는 주문 생성, 결제 처리, 배송 조정 등의 서브시스템을 단순한 인터페이스로 제공합니다.
+
+class OrderFacade {
+  private orderSystem: OrderSystem;
+  private paymentSystem: PaymentSystem;
+  private shippingSystem: ShippingSystem;
 
   constructor() {
-    this.accountService = new AccountService();
-    // 다른 서브시스템들도 초기화
+    this.orderSystem = new OrderSystem();
+    this.paymentSystem = new PaymentSystem();
+    this.shippingSystem = new ShippingSystem();
   }
 
-  createAccount(customerId: string): void {
-    this.accountService.createAccount(customerId);
-    // 다른 서브시스템들에 필요한 추가 작업 수행
-  }
-
-  getAccountBalance(accountId: string): number {
-    return this.accountService.getAccountBalance(accountId);
-    // 다른 서브시스템들에 필요한 추가 작업 수행
+  placeOrder(products: string[], amount: number, address: string): void {
+    const orderId = this.orderSystem.createOrder(products);
+    this.paymentSystem.processPayment(orderId, amount);
+    this.shippingSystem.adjustShipping(orderId, address);
   }
 }
 
-// BankFacade 클래스는 클라이언트에게 단순한 인터페이스를 제공하며, 내부적으로 여러 서브시스템의 기능을 조합하여 작업을 처리합니다.
+// 위의 코드에서 OrderFacade 클래스는 OrderSystem, PaymentSystem, ShippingSystem을 인스턴스로 가지고 있습니다.
+// placeOrder 메서드를 통해 주문 생성, 결제 처리, 배송 조정 등의 작업을 간단하게 수행할 수 있습니다.
 
-// 이제 클라이언트는 BankFacade를 사용하여 은행 업무를 처리할 수 있습니다
-const bank = new BankFacade();
+// 이제 사용자는 다음과 같이 OrderFacade를 통해 주문을 처리할 수 있습니다.
 
-bank.createAccount('1234567890');
-const balance = bank.getAccountBalance('9876543210');
+const orderFacade = new OrderFacade();
+orderFacade.placeOrder(['Product 1', 'Product 2'], 100, '123 Main Street');
 
-console.log(`Account balance: ${balance}`);
+// 위의 코드에서는 OrderFacade 인스턴스를 생성하고, placeOrder 메서드를 호출하여 주문을 처리합니다.
+// 사용자는 복잡한 주문 처리 과정을 알 필요 없이 간단한 인터페이스를 통해 주문을 처리할 수 있습니다.
 
-// 클라이언트는 Facade 클래스를 통해 간단하고 직관적인 인터페이스를 사용하여 여러 서브시스템의 복잡한 작업을 처리할 수 있습니다.
-// Facade 패턴을 통해 클라이언트는 내부 구조를 알 필요 없이 은행 업무를 처리할 수 있게 됩니다.
-
-// Facade 패턴은 복잡한 시스템을 단순화하고 클라이언트와의 결합도를 낮추는 데에 유용합니다.
-
-export {};
+// Facade 패턴을 사용하면 복잡한 서브시스템을 단순한 인터페이스로 감싸고, 사용자에게 더 편리하게 제공할 수 있습니다.
+// 또한, 서브시스템의 변경에도 영향을 최소화할 수 있으며, 코드의 가독성과 유지보수성을 향상시킬 수 있습니다.

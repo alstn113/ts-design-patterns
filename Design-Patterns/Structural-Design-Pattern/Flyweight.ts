@@ -45,13 +45,13 @@ class SpriteFactory {
 // 이제 클라이언트 코드에서 SpriteFactory를 사용하여 스프라이트를 생성하고 관리할 수 있습니다.
 const spriteFactory = new SpriteFactory();
 
-const sprite1 = spriteFactory.getSprite('character.png');
+const sprite1 = spriteFactory.getSprite('character.png'); // 새로운 스프라이트를 생성합니다.
 sprite1.draw();
 
-const sprite2 = spriteFactory.getSprite('character.png');
+const sprite2 = spriteFactory.getSprite('character.png'); // 이미 생성된 스프라이트를 사용합니다.
 sprite2.draw();
 
-const sprite3 = spriteFactory.getSprite('item.png');
+const sprite3 = spriteFactory.getSprite('item.png'); // 새로운 스프라이트를 생성합니다.
 sprite3.draw();
 
 console.log(`Total sprites created: ${spriteFactory.countSprites()}`);

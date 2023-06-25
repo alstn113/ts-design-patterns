@@ -1,50 +1,76 @@
-// 타입스크립트로 브릿지 패턴을 구현하는 일반적인 예시로는 웹 애플리케이션에서 다양한 플랫폼에 대한 알림을 처리하는 경우를 들 수 있습니다.
-// 예를 들어, 이메일, SMS, 푸시 알림 등 다양한 알림 유형이 있을 때 각 유형에 대한 알림을 특정 플랫폼에 맞게 전송해야 하는 상황입니다.
-// 이 경우 브릿지 패턴을 사용하여 유형과 플랫폼을 분리하고 유형과 플랫폼을 연결하는 중간 계층을 만들 수 있습니다.
+// Bridge 패턴은 추상화와 구현을 분리하여 두 개의 계층적인 클래스 구조를 연결하는 디자인 패턴입니다.
+// 이를 통해 추상화와 구현의 변경이 서로 독립적으로 이루어질 수 있고, 클래스 간의 강한 의존성을 줄일 수 있습니다.
 
-interface INotification {
-  send(message: string): void;
+// 일반적인 상황을 예시로 설명해보겠습니다. 가정해보세요 우리는 도로를 건설하는 프로그램을 개발하고 있습니다.
+// 도로에는 다양한 종류의 자동차가 사용될 수 있습니다. 도로의 종류는 다리(bridge)와 연결되어 있으며, 각각의 자동차는 자신에게 적합한 도로 위에서만 운행할 수 있습니다.
+// 이 때 Bridge 패턴을 활용하여 구현할 수 있습니다.
+
+// 먼저 추상화 계층을 나타내는 Road 클래스와 구현 계층을 나타내는 Car 클래스를 작성합니다.
+
+abstract class Road {
+  protected car: Car;
+
+  constructor(car: Car) {
+    this.car = car;
+  }
+
+  abstract drive(): void;
 }
 
-interface NotificationPlatform {
-  sendNotification(message: string): void;
-}
-
-class EmailNotificationPlatform implements NotificationPlatform {
-  sendNotification(message: string): void {
-    // 이메일 알림을 전송하는 로직 작성
+class ConcreteRoad extends Road {
+  drive(): void {
+    console.log('Driving on a concrete road...');
+    this.car.move();
   }
 }
 
-class SMSNotificationPlatform implements NotificationPlatform {
-  sendNotification(message: string): void {
-    // SMS 알림을 전송하는 로직 작성
+class DirtRoad extends Road {
+  drive(): void {
+    console.log('Driving on a dirt road...');
+    this.car.move();
   }
 }
 
-class PushNotificationPlatform implements NotificationPlatform {
-  sendNotification(message: string): void {
-    // 푸시 알림을 전송하는 로직 작성
+interface Car {
+  move(): void;
+}
+
+class Sedan implements Car {
+  move(): void {
+    console.log('Sedan is moving...');
   }
 }
 
-class NotificationBridge implements INotification {
-  constructor(private platform: NotificationPlatform) {}
-
-  send(message: string): void {
-    this.platform.sendNotification(message);
+class SUV implements Car {
+  move(): void {
+    console.log('SUV is moving...');
   }
 }
 
-const emailNotification = new NotificationBridge(
-  new EmailNotificationPlatform(),
-);
-emailNotification.send('Hello, email notification!');
+// 위 코드에서 Road는 추상화 계층을 나타내며, Car는 구현 계층을 나타냅니다. Road 클래스는 생성자를 통해 Car 객체를 받아옵니다.
+// ConcreteRoad와 DirtRoad는 Road 클래스를 상속받아 추상 메서드인 drive를 구현합니다. Car 인터페이스를 구현한 Sedan과 SUV는 move 메서드를 구현합니다.
 
-const smsNotification = new NotificationBridge(new SMSNotificationPlatform());
-smsNotification.send('Hello, SMS notification!');
+// 이제 코드를 실행하여 다양한 자동차가 다른 도로에서 움직이는 예시를 확인해봅시다.
 
-const pushNotification = new NotificationBridge(new PushNotificationPlatform());
-pushNotification.send('Hello, push notification!');
+const sedan = new Sedan();
+const suv = new SUV();
+
+const concreteRoad = new ConcreteRoad(sedan);
+concreteRoad.drive();
+// [출력]
+// Driving on a concrete road...
+// Sedan is moving...
+
+const dirtRoad = new DirtRoad(suv);
+dirtRoad.drive();
+// [출력]
+// Driving on a dirt road...
+// SUV is moving...
+
+// 위의 예시에서는 Sedan과 SUV가 각각 다른 도로에서 움직일 수 있도록 Bridge 패턴을 적용했습니다.
+// ConcreteRoad와 DirtRoad는 Road 클래스를 상속받아 도로에 대한 구체적인 구현을 제공하고, 각각의 자동차 객체를 생성자를 통해 전달받아 도로 위에서의 운행을 처리합니다.
+
+// 이렇게 Bridge 패턴을 사용하면 추상화 계층과 구현 계층이 독립적으로 발전할 수 있고, 클래스 간의 강한 의존성을 줄일 수 있습니다.
+// 새로운 도로나 자동차를 추가하더라도 기존 코드를 변경하지 않고 확장할 수 있습니다.
 
 export {};
