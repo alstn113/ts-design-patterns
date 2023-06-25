@@ -1,88 +1,92 @@
-// Abstract Factory 인터페이스
-interface AbstractFactory {
-  createProductA(): AbstractProductA;
-  createProductB(): AbstractProductB;
+// Abstract Factory 패턴은 관련된 객체들의 집합을 생성하기 위한 인터페이스를 제공하는 추상 팩토리 클래스를 사용하여 객체를 생성하는 디자인 패턴입니다.
+// 이를 통해 클라이언트 코드가 구체적인 클래스에 의존하지 않고도 객체를 생성할 수 있으며, 상호관련된 객체들을 일관성 있게 생성할 수 있습니다.
+// 아래는 타입스크립트로 Abstract Factory 패턴을 일반적인 상황에서 사용하는 예시입니다.
+
+// 상품 인터페이스
+interface Product {
+  name: string;
+  price: number;
+  getDescription(): string;
 }
 
-// 구체 팩토리 클래스 1
-class ConcreteFactory1 implements AbstractFactory {
-  createProductA(): AbstractProductA {
-    return new ConcreteProductA1();
+// 책 상품
+class BookProduct implements Product {
+  name: string;
+  price: number;
+
+  constructor(name: string, price: number) {
+    this.name = name;
+    this.price = price;
   }
 
-  createProductB(): AbstractProductB {
-    return new ConcreteProductB1();
-  }
-}
-
-// 구체 팩토리 클래스 2
-class ConcreteFactory2 implements AbstractFactory {
-  createProductA(): AbstractProductA {
-    return new ConcreteProductA2();
-  }
-
-  createProductB(): AbstractProductB {
-    return new ConcreteProductB2();
+  getDescription(): string {
+    return `Book: ${this.name}, Price: $${this.price}`;
   }
 }
 
-// Abstract Product 인터페이스 A
-interface AbstractProductA {
-  methodA(): void;
-}
+// 음악 CD 상품
+class MusicCDProduct implements Product {
+  name: string;
+  price: number;
 
-// Abstract Product 인터페이스 B
-interface AbstractProductB {
-  methodB(): void;
-}
+  constructor(name: string, price: number) {
+    this.name = name;
+    this.price = price;
+  }
 
-// 구체적인 제품 클래스 A1
-class ConcreteProductA1 implements AbstractProductA {
-  methodA(): void {
-    console.log('ConcreteProductA1: methodA');
+  getDescription(): string {
+    return `Music CD: ${this.name}, Price: $${this.price}`;
   }
 }
 
-// 구체적인 제품 클래스 A2
-class ConcreteProductA2 implements AbstractProductA {
-  methodA(): void {
-    console.log('ConcreteProductA2: methodA');
+// 추상 팩토리 인터페이스
+interface ProductFactory {
+  createProduct(name: string, price: number): Product;
+}
+
+// 책 팩토리
+class BookFactory implements ProductFactory {
+  createProduct(name: string, price: number): Product {
+    return new BookProduct(name, price);
   }
 }
 
-// 구체적인 제품 클래스 B1
-class ConcreteProductB1 implements AbstractProductB {
-  methodB(): void {
-    console.log('ConcreteProductB1: methodB');
+// 음악 CD 팩토리
+class MusicCDFactory implements ProductFactory {
+  createProduct(name: string, price: number): Product {
+    return new MusicCDProduct(name, price);
   }
 }
 
-// 구체적인 제품 클래스 B2
-class ConcreteProductB2 implements AbstractProductB {
-  methodB(): void {
-    console.log('ConcreteProductB2: methodB');
-  }
+// 클라이언트 코드
+function createProduct(
+  factory: ProductFactory,
+  name: string,
+  price: number,
+): Product {
+  return factory.createProduct(name, price);
 }
 
-const clientCode = (factory: AbstractFactory): void => {
-  const productA = factory.createProductA();
-  const productB = factory.createProductB();
+// 팩토리 선택
+const bookFactory: ProductFactory = new BookFactory();
+const musicCDFactory: ProductFactory = new MusicCDFactory();
 
-  productA.methodA();
-  productB.methodB();
-};
+// 상품 생성
+const book: Product = createProduct(bookFactory, 'The Great Gatsby', 10);
+console.log(book.getDescription()); // 출력: Book: The Great Gatsby, Price: $10
 
-// 클라이언트 코드에서 구체 팩토리를 사용하여 객체 생성
-const factory1: AbstractFactory = new ConcreteFactory1();
-clientCode(factory1);
-// [출력]
-// ConcreteProductA1: methodA
-// ConcreteProductB1: methodB
+const musicCD: Product = createProduct(musicCDFactory, 'Best Hits', 15);
+console.log(musicCD.getDescription()); // 출력: Music CD: Best Hits, Price: $15
 
-const factory2: AbstractFactory = new ConcreteFactory2();
-clientCode(factory2);
-// [출력]
-// ConcreteProductA2: methodA;
-// ConcreteProductB2: methodB;
+// 위 예시에서는 `Product` 인터페이스를 정의하고, 이를 구현하는 `BookProduct`과 `MusicCDProduct` 클래스를 생성합니다.
+// 각 클래스는 생성자를 통해 이름(`name`)과 가격(`price`)을 받아 초기화하며, `getDescription` 메서드를 통해 상품의 설명을 반환합니다.
+
+// 또한, `ProductFactory` 인터페이스를 정의하고, 이를 구현하는 `BookFactory`와 `MusicCDFactory` 클래스를 생성합니다.
+// 각 팩토리 클래스는 `createProduct` 메서드를 통해 해당하는 상품 객체를 생성하여 반환합니다.
+
+// `createProduct` 함수는 팩토리와 필요한 정보인 이름과 가격을 받아 해당하는 상품을 생성합니다.
+
+// 마지막으로, 클라이언트 코드에서는 팩토리를 선택하고 `createProduct` 함수를 통해 상품 객체를 생성하고 사용합니다.
+// 이를 통해 클라이언트 코드는 구체적인 클래스에 의존하지 않고도 추상적인 팩토리를 통해 객체를 생성할 수 있습니다.
 
 export {};
