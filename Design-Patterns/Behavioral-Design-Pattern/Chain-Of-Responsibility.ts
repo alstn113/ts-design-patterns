@@ -1,97 +1,93 @@
-// Chain of Responsibility (책임 연쇄) 패턴은 요청을 처리하는 객체들의 연결된 체인을 구성하여 각 객체가 순서대로 요청을 처리하도록 하는 패턴입니다.
-// 이를 일반적인 상황으로 설명하기 위해 로깅 시스템을 가정해보겠습니다.
+// Chain of Responsibility 패턴은 요청을 처리하는 객체들을 체인 형태로 연결하여 처리할 수 있는 디자인 패턴입니다.
+// 각각의 객체는 요청을 처리할 수 있는지 여부를 판단하고, 요청을 처리할 수 있는 경우 처리하거나 다음 객체에게 전달하는 방식으로 동작합니다.
 
-// 먼저, 로깅 수준(Level)을 정의하는 열거형을 작성합니다.
-enum LogLevel {
-  INFO,
-  DEBUG,
-  WARNING,
-  ERROR,
-}
+// 일반적인 상황을 예시로 설명해보겠습니다. 가정해보세요 우리는 여러 단계로 이루어진 결재 시스템을 개발하고 있습니다.
+// 각 단계에서는 결재 요청을 처리할 수 있는 직원이 지정되어 있으며, 요청이 한 단계에서 처리되지 않으면 다음 단계로 전달됩니다.
+// 이때 Chain of Responsibility 패턴을 활용하여 요청을 처리하는 체인을 구성할 수 있습니다.
 
-// 다음으로, 로깅 핸들러(Handler)를 나타내는 추상 클래스를 작성합니다.
-abstract class Logger {
-  protected next: Logger | null;
+// 먼저, 요청을 처리하는 추상 클래스인 Approver를 작성합니다.
 
-  constructor(next: Logger | null = null) {
-    this.next = next;
+abstract class Approver {
+  private nextApprover: Approver | null;
+
+  constructor() {
+    this.nextApprover = null;
+  }
+  public setNextApprover(nextApprover: Approver): void {
+    this.nextApprover = nextApprover;
   }
 
-  setNext(logger: Logger): void {
-    this.next = logger;
-  }
-
-  log(level: LogLevel, message: string): void {
-    if (this.shouldHandle(level)) {
-      this.writeLog(message);
-    }
-
-    if (this.next) {
-      this.next.log(level, message);
+  public processRequest(amount: number): void {
+    if (this.canApprove(amount)) {
+      this.approveRequest(amount);
+    } else if (this.nextApprover) {
+      this.nextApprover.processRequest(amount);
+    } else {
+      console.log('No one can approve the request.');
     }
   }
 
-  abstract shouldHandle(level: LogLevel): boolean;
+  protected abstract canApprove(amount: number): boolean;
 
-  abstract writeLog(message: string): void;
+  protected abstract approveRequest(amount: number): void;
 }
 
-// Logger 추상 클래스는 다음 로깅 핸들러를 가리키는 next 속성과 로깅을 수행하는 log 메서드를 가지고 있습니다.
-// log 메서드는 현재 핸들러에서 로깅을 수행할지 확인한 후, 다음 핸들러로 요청을 전달합니다.
-// shouldHandle 메서드는 현재 핸들러가 주어진 로깅 수준을 처리할 수 있는지 여부를 확인합니다.
-// writeLog 메서드는 실제 로깅을 수행하는 구체적인 동작을 구현합니다.
+// 위의 코드에서 Approver는 다음 Approver 객체를 참조하는 nextApprover 멤버 변수를 가지고 있습니다.
+//  setNextApprover 메서드를 통해 다음 Approver 객체를 설정할 수 있습니다.
+// processRequest 메서드는 요청을 처리하는 메서드로, 자식 클래스에서 구체적인 처리 로직을 구현하도록 합니다.
+// canApprove 메서드는 요청을 처리할 수 있는지 여부를 판단하고, approveRequest 메서드는 실제 요청을 처리하는 로직을 구현합니다.
 
-// 이제, 실제 로깅 핸들러들을 작성합니다.
+// 다음으로, 각 단계에서 결재를 처리하는 구체적인 Approver 클래스를 작성합니다.
 
-class ConsoleLogger extends Logger {
-  shouldHandle(level: LogLevel): boolean {
-    return level === LogLevel.INFO || level === LogLevel.DEBUG;
+class Manager extends Approver {
+  protected canApprove(amount: number): boolean {
+    return amount <= 1000;
   }
 
-  writeLog(message: string): void {
-    console.log(`[Console] ${message}`);
-  }
-}
-
-class FileLogger extends Logger {
-  shouldHandle(level: LogLevel): boolean {
-    return level === LogLevel.WARNING || level === LogLevel.ERROR;
-  }
-
-  writeLog(message: string): void {
-    console.log(`[File] ${message}`);
+  protected approveRequest(amount: number): void {
+    console.log(`Manager approved the request for amount: $${amount}`);
   }
 }
 
-class EmailLogger extends Logger {
-  shouldHandle(level: LogLevel): boolean {
-    return level === LogLevel.ERROR;
+class Director extends Approver {
+  protected canApprove(amount: number): boolean {
+    return amount <= 5000;
   }
 
-  writeLog(message: string): void {
-    console.log(`[Email] ${message}`);
+  protected approveRequest(amount: number): void {
+    console.log(`Director approved the request for amount: $${amount}`);
   }
 }
 
-// 각 로깅 핸들러 클래스는 shouldHandle 메서드를 구현하여 처리할 수 있는 로깅 수준을 확인하고, writeLog 메서드를 구현하여 실제 로깅을 수행합니다.
-// 마지막으로, 로깅 체인을 구성하고 요청을 보내는 코드를 작성합니다.
+class CEO extends Approver {
+  protected canApprove(amount: number): boolean {
+    return amount <= 10000;
+  }
 
-const loggerChain = new ConsoleLogger();
-const fileLogger = new FileLogger();
-const emailLogger = new EmailLogger();
+  protected approveRequest(amount: number): void {
+    console.log(`CEO approved the request for amount: $${amount}`);
+  }
+}
 
-loggerChain.setNext(fileLogger);
-fileLogger.setNext(emailLogger);
+// 위의 코드에서 Manager, Director, CEO는 결재 체인의 각 단계에서 역할을 수행합니다.
+// canApprove 메서드에서 해당 단계에서 결재를 처리할 수 있는지 여부를 판단하고, approveRequest 메서드에서 실제 결재 처리 로직을 구현합니다.
 
-loggerChain.log(LogLevel.INFO, 'This is an informational message.');
-loggerChain.log(LogLevel.WARNING, 'This is a warning message.');
-loggerChain.log(LogLevel.ERROR, 'This is an error message.');
+// 이제 사용자는 다음과 같이 결재 요청을 생성하고 체인을 통해 처리할 수 있습니다.
 
-// 위의 코드에서는 loggerChain을 생성한 후, 각 로깅 핸들러를 연결합니다.
-// log 메서드를 호출하여 각 로깅 수준과 메시지를 전달합니다.
-// 요청은 체인을 따라 각 핸들러에서 처리되며, 적절한 로깅 핸들러가 로그를 기록합니다.
+const manager = new Manager();
+const director = new Director();
+const ceo = new CEO();
 
-// Chain of Responsibility 패턴을 사용하면 요청을 처리할 객체들의 체인을 구성하여 유연하게 처리 로직을 변경하거나 추가할 수 있습니다.
-// 로깅 시스템 외에도 사용자 인증, 예외 처리 등 다양한 상황에서 유용하게 적용할 수 있습니다.
+manager.setNextApprover(director);
+director.setNextApprover(ceo);
+
+manager.processRequest(500); // Manager approved the request for amount: $500
+manager.processRequest(2000); // Director approved the request for amount: $2000
+manager.processRequest(8000); // CEO approved the request for amount: $8000
+manager.processRequest(15000); // No one can approve the request.
+
+// 위의 코드에서는 Manager, Director, CEO 객체를 생성하고, setNextApprover 메서드를 통해 다음 결재자를 설정합니다.
+// processRequest 메서드를 호출하여 결재 요청을 처리하면, 체인을 따라 각 단계에서 적절한 결재자가 요청을 처리하게 됩니다.
+// 마지막으로, 결재 요청이 모든 단계를 통과하지 못하면 "No one can approve the request." 메시지가 출력됩니다.
 
 export {};
